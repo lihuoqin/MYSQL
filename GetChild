@@ -1,0 +1,20 @@
+BEGIN
+		DECLARE str TEXT;
+		DECLARE c  TEXT;
+
+		SET str='';
+		SELECT IFNULL((SELECT group_concat(id) FROM `user` WHERE pid = x),'') into c;
+		IF c=x THEN 
+				RETURN str;
+		END IF;
+		WHILE c <> '' DO
+			IF str='' THEN 
+				SET str = CONCAT(c);
+			ELSE
+				SET str = CONCAT(str,',',c);
+			END IF;
+			
+			SELECT IFNULL((SELECT group_concat(id) FROM `user` WHERE FIND_IN_SET(pid,c)>0),'') into c;
+		END WHILE;
+	RETURN str;
+END
