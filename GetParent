@@ -1,0 +1,19 @@
+BEGIN
+		DECLARE str TEXT;
+		DECLARE p VARCHAR(200);
+
+		SET str='';
+		SELECT IFNULL((SELECT pid FROM `user` WHERE id = x),0) into p;
+		IF p=x THEN 
+				RETURN str;
+		END IF;
+		WHILE p <> 0 DO
+			IF str='' THEN 
+				SET str = CONCAT(p);
+			ELSE
+				SET str = CONCAT(str,',',p);
+			END IF;
+			SELECT IFNULL((SELECT pid FROM `user` WHERE id = p),0) into p;
+		END WHILE;
+	RETURN str;
+END
